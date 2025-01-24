@@ -32,7 +32,7 @@ const AuthForm = () => {
         );
         if (!isLogin) setIsLogin(true);
         localStorage.setItem("username", data.username);
-        navigate("/chat");
+        navigate("/chat-selection");
       } else {
         alert(data.error || "Something went wrong");
       }

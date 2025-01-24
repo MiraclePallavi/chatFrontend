@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-const Chat = () => {
+const GroupChat = () => {
   const [socket, setSocket] = useState(null);
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
   const [username, setUsername] = useState("");
   const navigate = useNavigate();
 
-  // Redirect to login if no username is found
   useEffect(() => {
     const user = localStorage.getItem("username");
     if (!user) {
@@ -18,7 +17,7 @@ const Chat = () => {
     }
   }, [navigate]);
 
-  // Set up WebSocket connection
+
   useEffect(() => {
     if (username) {
       const ws = new WebSocket(`ws://127.0.0.1:8000/?username=${username}`);
@@ -31,7 +30,7 @@ const Chat = () => {
       ws.onmessage = (event) => {
         const data = JSON.parse(event.data);
         if (data.message && data.username) {
-          setMessages((prev) => [...prev, data]); // Add only server-broadcasted messages
+          setMessages((prev) => [...prev, data]); 
         }
       };
 
@@ -45,23 +44,22 @@ const Chat = () => {
     }
   }, [username]);
 
-  // Send message through WebSocket
+  
   const sendMessage = () => {
     if (socket && message.trim()) {
-      socket.send(JSON.stringify({ message, username })); // Send only; server will handle broadcasting
-      setMessage(""); // Clear the input field
+      socket.send(JSON.stringify({ message, username })); 
+      setMessage(""); 
     }
   };
 
   return (
     <div style={styles.container}>
-      {/* Header */}
+     
       <div style={styles.header}>
         <h1 style={styles.title}>Chat Room</h1>
         {username && <p style={styles.subtitle}>Welcome, {username}!</p>}
       </div>
 
-      {/* Chat Area */}
       <div style={styles.chatArea}>
         {messages.map((msg, index) => (
           <div
@@ -81,7 +79,7 @@ const Chat = () => {
         ))}
       </div>
 
-      {/* Input Area */}
+     
       <div style={styles.inputArea}>
         <input
           type="text"
@@ -98,7 +96,7 @@ const Chat = () => {
   );
 };
 
-// Styles
+
 const styles = {
   container: {
     display: "flex",
@@ -186,4 +184,4 @@ const styles = {
   },
 };
 
-export default Chat;
+export default GroupChat;
